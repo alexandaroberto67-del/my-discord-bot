@@ -528,4 +528,5 @@ class AppPanelView(discord.ui.View):
             self.add_item(AppButton(s, row=i // 4))
 
 
-bot.run(TOKEN)
+bot.run(os.getenv("DISCORD_TOKEN"))
+
