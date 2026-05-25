@@ -631,8 +631,18 @@ class AppPanelView(discord.ui.View):
             self.add_item(AppButton(s, row=i // 4))
 
 
-bot.run(TOKEN)
+# 1. Imports should usually be at the VERY top of the file, 
+# but if you put it here, it must be before you use 'os'
 import os
+
+# 2. Get the token first
 TOKEN = os.getenv('TOKEN')
-print(f"Token starts with: {TOKEN[:5]}...") # Only prints the first 5 characters for safety
+
+# 3. Debug print (optional, but helpful for Railway)
+if TOKEN:
+    print(f"Token detected! Starts with: {TOKEN[:5]}...")
+else:
+    print("TOKEN NOT FOUND! Check your Railway Variables.")
+
+# 4. Run the bot LAST
 bot.run(TOKEN)
