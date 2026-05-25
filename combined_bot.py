@@ -269,6 +269,104 @@ class SupportControlView(discord.ui.View):
 
 # ── Slash Commands ────────────────────────────────────────────────────────────
 
+
+# ── Prices ────────────────────────────────────────────────────────────────────
+
+SERVICE_PRICES = {
+    "alt": {
+        "label": "🔄 Alt Servicing",
+        "prices": [
+            ("Basic Alt Setup", "50 R$"),
+            ("Full Alt Package", "120 R$"),
+            ("Premium Management", "250 R$"),
+        ]
+    },
+    "els": {
+        "label": "🚨 ELS Designer",
+        "prices": [
+            ("Basic ELS", "150 R$"),
+            ("Advanced ELS", "350 R$"),
+            ("Custom Premium ELS", "600 R$"),
+        ]
+    },
+    "banner": {
+        "label": "🖼️ Banner Designer",
+        "prices": [
+            ("Small Banner", "75 R$"),
+            ("Animated Banner", "200 R$"),
+            ("Premium Server Banner", "350 R$"),
+        ]
+    },
+    "logo": {
+        "label": "✏️ Logo Designer",
+        "prices": [
+            ("Simple Logo", "100 R$"),
+            ("Detailed Logo", "250 R$"),
+            ("Professional Logo Pack", "500 R$"),
+        ]
+    },
+    "graphic": {
+        "label": "🎨 Graphic Designer",
+        "prices": [
+            ("Basic Graphic", "80 R$"),
+            ("Custom Graphic", "180 R$"),
+            ("Full Graphic Package", "400 R$"),
+        ]
+    },
+    "uniform": {
+        "label": "👕 Uniform Designer",
+        "prices": [
+            ("Simple Uniform", "120 R$"),
+            ("Department Uniform Set", "300 R$"),
+            ("Premium Custom Uniform", "550 R$"),
+        ]
+    },
+    "livery": {
+        "label": "🚗 Livery Designer",
+        "prices": [
+            ("Basic Livery", "200 R$"),
+            ("Detailed Livery", "450 R$"),
+            ("Full Fleet Package", "900 R$"),
+        ]
+    },
+    "discord": {
+        "label": "💬 Discord Designer",
+        "prices": [
+            ("Basic Server Design", "150 R$"),
+            ("Full Server Setup", "400 R$"),
+            ("Premium Custom Server", "750 R$"),
+        ]
+    },
+}
+
+
+class PricesSelect(discord.ui.Select):
+    def __init__(self):
+        options = [
+            discord.SelectOption(label=s["label"], emoji=s["emoji"], value=s["prefix"])
+            for s in SERVICES
+        ]
+        super().__init__(placeholder="💰 View prices for a service...", min_values=1, max_values=1, options=options, custom_id="prices_select")
+
+    async def callback(self, interaction: discord.Interaction):
+        prefix = self.values[0]
+        data = SERVICE_PRICES.get(prefix)
+        if not data:
+            await interaction.response.send_message("Prices not found.", ephemeral=True)
+            return
+        embed = discord.Embed(title=f"{data['label']} — Pricing", color=0x5865F2)
+        for name, price in data["prices"]:
+            embed.add_field(name=name, value=price, inline=True)
+        embed.set_footer(text="Prices are in Robux (R$)")
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+class PricesView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        self.add_item(PricesSelect())
+
+
 @bot.tree.command(name="panel", description="Post the design services panel (staff only)")
 @app_commands.guilds(discord.Object(id=GUILD_ID))
 async def panel(interaction):
@@ -277,6 +375,8 @@ async def panel(interaction):
         return
     embed = discord.Embed(title="🎨 Vine Customs — Design Services", description="Welcome! Select the service you'd like to purchase below.\nA private ticket will be created for you.\n\n" + "\n".join(f"{s['emoji']} **{s['label']}**" for s in SERVICES), color=0x5865F2)
     await interaction.channel.send(embed=embed, view=DesignPanelView())
+    prices_embed = discord.Embed(title="💰 Vine Customs — Pricing", description="Select a service below to view its pricing.", color=0x5865F2)
+    await interaction.channel.send(embed=prices_embed, view=PricesView())
     await interaction.response.send_message("Panel posted.", ephemeral=True)
 
 @bot.tree.command(name="supportpanel", description="Post the support panel (staff only)")
@@ -361,6 +461,7 @@ async def on_ready():
     bot.add_view(DesignControlView())
     bot.add_view(SupportPanelView())
     bot.add_view(SupportControlView())
+    bot.add_view(PricesView())
     load_apps()
     bot.add_view(AppPanelView())
     bot.add_view(ReviewView("placeholder"))
@@ -528,5 +629,4 @@ class AppPanelView(discord.ui.View):
             self.add_item(AppButton(s, row=i // 4))
 
 
-bot.run(os.getenv("DISCORD_TOKEN"))
-
+bot.run(TOKEN)
