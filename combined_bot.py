@@ -629,4 +629,13 @@ class AppPanelView(discord.ui.View):
             self.add_item(AppButton(s, row=i // 4))
 
 
-bot.run(TOKEN)
+import os
+
+# This MUST match the name in your Railway screenshot exactly
+token = os.getenv('DISCORD_TOKEN') 
+
+if token is None:
+    print("Error: DISCORD_TOKEN variable not found in environment!")
+else:
+    bot.run(token)
+    
