@@ -8,6 +8,8 @@ from datetime import datetime
 
 TOKEN = "MTUwNzE2NTI5ODUxODY1NDk4Nw.GNmccg.-1rb_KY5FeXUJwzsU0LHrobRS51pF188M9QEXc"
 GUILD_ID = 1488378242846036070
+GUILD_ID_2 = 1508606322470420480
+ALL_GUILDS = [discord.Object(id=1488378242846036070), discord.Object(id=1508606322470420480)]
 UNCLAIMED_CATEGORY_ID = 1507173928705986692
 CLAIMED_CATEGORY_ID = 1507173970531586109
 GUIDELINES_CHANNEL_ID = 1488378243697606713
@@ -368,7 +370,7 @@ class PricesView(discord.ui.View):
 
 
 @bot.tree.command(name="panel", description="Post the design services panel (staff only)")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
+@app_commands.guilds(*ALL_GUILDS)
 async def panel(interaction):
     if not is_design_staff(interaction.user):
         await interaction.response.send_message("Only staff can post the panel.", ephemeral=True)
@@ -380,7 +382,7 @@ async def panel(interaction):
     await interaction.response.send_message("Panel posted.", ephemeral=True)
 
 @bot.tree.command(name="supportpanel", description="Post the support panel (staff only)")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
+@app_commands.guilds(*ALL_GUILDS)
 async def support_panel(interaction):
     if not is_support_staff(interaction.user):
         await interaction.response.send_message("Only staff can post the panel.", ephemeral=True)
@@ -395,7 +397,7 @@ async def support_panel(interaction):
     await interaction.response.send_message("Support panel posted.", ephemeral=True)
 
 @bot.tree.command(name="postguidelines", description="Re-post the guidelines (staff only)")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
+@app_commands.guilds(*ALL_GUILDS)
 async def postguidelines(interaction):
     if not is_design_staff(interaction.user) and not is_support_staff(interaction.user):
         await interaction.response.send_message("Only staff can post guidelines.", ephemeral=True)
@@ -404,7 +406,7 @@ async def postguidelines(interaction):
     await post_guidelines(interaction.guild)
 
 @bot.tree.command(name="tickets", description="List open design tickets (staff only)")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
+@app_commands.guilds(*ALL_GUILDS)
 async def list_design(interaction):
     if not is_design_staff(interaction.user):
         await interaction.response.send_message("Only staff can view tickets.", ephemeral=True)
@@ -417,7 +419,7 @@ async def list_design(interaction):
     await interaction.response.send_message(embed=discord.Embed(title=f"Open Design Tickets ({len(open_t)})", description="\n".join(lines), color=0x5865F2), ephemeral=True)
 
 @bot.tree.command(name="supporttickets", description="List open support tickets (staff only)")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
+@app_commands.guilds(*ALL_GUILDS)
 async def list_support(interaction):
     if not is_support_staff(interaction.user):
         await interaction.response.send_message("Only staff can view tickets.", ephemeral=True)
@@ -433,7 +435,7 @@ async def list_support(interaction):
 # ── Events ────────────────────────────────────────────────────────────────────
 
 @bot.tree.command(name="apppanel", description="Post the applications panel (admin only)")
-@app_commands.guilds(discord.Object(id=GUILD_ID))
+@app_commands.guilds(*ALL_GUILDS)
 async def app_panel(interaction: discord.Interaction):
     if not can_review(interaction.user):
         await interaction.response.send_message("❌ Only admins can post this panel.", ephemeral=True)
@@ -447,9 +449,9 @@ async def app_panel(interaction: discord.Interaction):
     await interaction.response.send_message("✅ Application panel posted.", ephemeral=True)
 
 async def sync_and_run():
-    guild_obj = discord.Object(id=GUILD_ID)
-    bot.tree.copy_global_to(guild=guild_obj)
-    await bot.tree.sync(guild=guild_obj)
+    for g in ALL_GUILDS:
+        bot.tree.copy_global_to(guild=g)
+        await bot.tree.sync(guild=g)
 
 
 @bot.event
@@ -465,9 +467,9 @@ async def on_ready():
     load_apps()
     bot.add_view(AppPanelView())
     bot.add_view(ReviewView("placeholder"))
-    guild_obj = discord.Object(id=GUILD_ID)
-    bot.tree.copy_global_to(guild=guild_obj)
-    await bot.tree.sync(guild=guild_obj)
+    for g in ALL_GUILDS:
+        bot.tree.copy_global_to(guild=g)
+        await bot.tree.sync(guild=g)
     print(f"✅ Logged in as {bot.user}")
     print(f"   {len(design_tickets)} design tickets, {len(support_tickets)} support tickets loaded.")
     guild = bot.get_guild(GUILD_ID)
@@ -629,13 +631,4 @@ class AppPanelView(discord.ui.View):
             self.add_item(AppButton(s, row=i // 4))
 
 
-import os
-
-# This MUST match the name in your Railway screenshot exactly
-token = os.getenv('DISCORD_TOKEN') 
-
-if token is None:
-    print("Error: DISCORD_TOKEN variable not found in environment!")
-else:
-    bot.run(token)
-    
+bot.run(TOKEN)
