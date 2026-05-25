@@ -636,7 +636,7 @@ class AppPanelView(discord.ui.View):
 import os
 
 # 2. Get the token first
-TOKEN = os.getenv('TOKEN')
+TOKEN = os.getenv('TOKEN', '').strip()
 
 # 3. Debug print (optional, but helpful for Railway)
 if TOKEN:
