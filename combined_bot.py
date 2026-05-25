@@ -632,3 +632,7 @@ class AppPanelView(discord.ui.View):
 
 
 bot.run(TOKEN)
+import os
+TOKEN = os.getenv('TOKEN')
+print(f"Token starts with: {TOKEN[:5]}...") # Only prints the first 5 characters for safety
+bot.run(TOKEN)
