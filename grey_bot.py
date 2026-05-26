@@ -6,7 +6,7 @@ import os
 import asyncio
 from datetime import datetime
 
-TOKEN = "MTUwODYzMDkyNDY1MTM5NzIyMQ.GXRFv9.NVq1VHsnCIKNHDrIR3qvSBDIv1yDiIMio5sMC4"
+TOKEN = os.getenv("TOKEN_2")
 GUILD_ID = 1508606322470420480
 
 VERIFY_CHANNEL_ID     = 1508606322470420486
