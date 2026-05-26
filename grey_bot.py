@@ -6,7 +6,7 @@ import os
 import asyncio
 from datetime import datetime
 
-TOKEN = "MTUwODYzMDkyNDY1MTM5NzIyMQ.GM9l8J.-xEow2Wpsqbz1nxtXwb8yfEDA_9wiqwJtMTXYg"
+TOKEN = "MTUwODYzMDkyNDY1MTM5NzIyMQ.GXRFv9.NVq1VHsnCIKNHDrIR3qvSBDIv1yDiIMio5sMC4"
 GUILD_ID = 1508606322470420480
 
 VERIFY_CHANNEL_ID     = 1508606322470420486
@@ -548,4 +548,4 @@ async def on_ready():
     print(f"✅ Grey County Bot logged in as {bot.user}")
     print(f"   {len(applications)} apps | {len(tickets)} tickets | {len(loas)} LOAs loaded.")
 
-bot.run(os.getenv('TOKEN_2'))
+bot.run(TOKEN)
