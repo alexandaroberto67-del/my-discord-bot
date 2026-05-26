@@ -548,4 +548,4 @@ async def on_ready():
     print(f"✅ Grey County Bot logged in as {bot.user}")
     print(f"   {len(applications)} apps | {len(tickets)} tickets | {len(loas)} LOAs loaded.")
 
-bot.run(os.getenv('TOKEN_SECOND_BOT'))
+bot.run(os.getenv('TOKEN_2'))
