@@ -8,7 +8,7 @@ from datetime import datetime
 
 # Safe Environment Variables (Set these up in Railway's 'Variables' tab)
 TOKEN = os.getenv("DISCORD_TOKEN")
-GUILD_ID = int(os.getenv("DISCORD_GUILD_ID", "0"))
+GUILD_ID = 1508606322470420480
 
 VERIFY_CHANNEL_ID     = 1508606322470420486
 DISCORD_RULES_CHANNEL = 1508606323246501968
