@@ -6,8 +6,7 @@ import os
 import asyncio
 from datetime import datetime
 
-# Safe Environment Variables (Set these up in Railway's 'Variables' tab)
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = "MTUwODYzMDkyNDY1MTM5NzIyMQ.GXRFv9.NVq1VHsnCIKNHDrIR3qvSBDIv1yDiIMio5sMC4"
 GUILD_ID = 1508606322470420480
 
 VERIFY_CHANNEL_ID     = 1508606322470420486
@@ -549,7 +548,4 @@ async def on_ready():
     print(f"✅ Grey County Bot logged in as {bot.user}")
     print(f"   {len(applications)} apps | {len(tickets)} tickets | {len(loas)} LOAs loaded.")
 
-if TOKEN:
-    bot.run(TOKEN)
-else:
-    print("❌ Critical Error: DISCORD_TOKEN environment variable is missing!")
+bot.run(TOKEN)
